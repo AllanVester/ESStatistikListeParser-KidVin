@@ -1,0 +1,82 @@
+name: Runner
+
+on:
+  workflow_dispatch:
+    inputs:
+      filename:
+        description: 'ESStatistikListeModtag Filename'
+        required: true
+        type: string
+      filename-no-suffix:
+        description: 'ESStatistikListeModtag Filename (No Suffix)'
+        required: true
+        type: string
+      discord-upload-limit:
+        description: 'Discord Upload Limit (In MiB)'
+        required: true
+        type: string
+      github-upload-limit:
+        description: 'GitHub Upload Limit (In MiB)'
+        required: true
+        type: string
+
+jobs:
+  kidvin:
+    name: Run KidVin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v5
+        with:
+          remove-dotnet: "true"
+          remove-android: "true"
+          remove-haskell: "true"
+          remove-codeql: "true"
+          remove-docker-images: "true"
+          remove-large-packages: "true"
+          remove-cached-tools: "true"
+          remove-swapfile: "true"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: "AllanVester/ESStatistikListeParser-GitHub"
+          ref: "main"
+          path: "${{ github.workspace }}/"
+          sparse-checkout: |
+            /go.mod
+            /go.sum
+            /KidVin-GitHub.go
+          sparse-checkout-cone-mode: false
+          token: "${{ secrets.PAT }}"
+
+      - name: Checkout ESStatistikListeModtag repository
+        uses: actions/checkout@v4
+        with:
+          repository: "AllanVester/ESStatistikListeModtag"
+          ref: "main"
+          path: "${{ github.workspace }}/temp/"
+          sparse-checkout: |
+            /ESStatistikListeModtag
+          sparse-checkout-cone-mode: false
+          token: "${{ secrets.PAT }}"
+
+      - name: Stitch files back together
+        run: |
+          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename }}"
+          file "${{ github.workspace }}/${{ inputs.filename }}"
+          
+          rm -rf ${{ github.workspace }}/temp/
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.21
+
+      - name: Install Go dependencies
+        run: |
+          go mod tidy
+
+      - name: Run KidVin Go script
+        run: |
+          go run ${{ github.workspace }}/KidVin-GitHub.go
