@@ -80,3 +80,5 @@ jobs:
       - name: Run KidVin Go script
         run: |
           go run ${{ github.workspace }}/KidVin-GitHub.go
+
+          df -h
