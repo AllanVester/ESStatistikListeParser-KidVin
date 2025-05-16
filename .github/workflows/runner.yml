@@ -81,4 +81,4 @@ jobs:
         run: |
           go run ${{ github.workspace }}/KidVin-GitHub.go
 
-          df -h
+          ls -lh
