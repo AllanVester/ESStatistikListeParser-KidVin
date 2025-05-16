@@ -59,6 +59,8 @@ jobs:
         run: |
           cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.sql.gz"
           file "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.sql.gz"
+
+          ls -lh
           
           rm -rf ${{ github.workspace }}/temp/
 
