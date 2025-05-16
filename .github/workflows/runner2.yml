@@ -1,0 +1,82 @@
+name: Runner (MySQL)
+
+on:
+  workflow_dispatch:
+    inputs:
+      filename:
+        description: 'ESStatistikListeModtag Filename'
+        required: true
+        type: string
+      filename-no-suffix:
+        description: 'ESStatistikListeModtag Filename (No Suffix)'
+        required: true
+        type: string
+      discord-upload-limit:
+        description: 'Discord Upload Limit (In MiB)'
+        required: true
+        type: string
+      github-upload-limit:
+        description: 'GitHub Upload Limit (In MiB)'
+        required: true
+        type: string
+
+jobs:
+  kidvin:
+    name: Run KidVin
+    runs-on: ubuntu-latest
+    steps:
+      # - name: Maximize build space
+      #   uses: AdityaGarg8/remove-unwanted-software@v5
+      #   with:
+      #     remove-dotnet: "true"
+      #     remove-android: "true"
+      #     remove-haskell: "true"
+      #     remove-codeql: "true"
+      #     remove-docker-images: "true"
+      #     remove-large-packages: "true"
+      #     remove-cached-tools: "true"
+      #     remove-swapfile: "true"
+
+      - name: Checkout ESStatistikListeModtag repository (MySQL-branch)
+        uses: actions/checkout@v4
+        with:
+          repository: "AllanVester/ESStatistikListeModtag"
+          ref: "mysql"
+          path: "${{ github.workspace }}/temp/"
+          sparse-checkout: |
+            /ESStatistikListeModtag
+          sparse-checkout-cone-mode: false
+          token: "${{ secrets.PAT }}"
+
+      - name: Set up MySQL
+        uses: ankane/setup-mariadb@v1
+        
+      - name: Import schema into MySQL
+        run: |
+          /usr/bin/mariadb < "Bilgaden.sql"
+
+      - name: Tune MySQL buffer pool size
+        run: |
+          /usr/bin/mariadb -e "SET GLOBAL innodb_buffer_pool_size = 14 * 1024 * 1024 * 1024;"
+
+      - name: Stitch files back together
+        run: |
+          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.sql.gz"
+          file "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.sql.gz"
+          
+          rm -rf ${{ github.workspace }}/temp/
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.21
+
+      - name: Install Go dependencies
+        run: |
+          go mod tidy
+
+      - name: Run KidVin Go script
+        run: |
+          go run ${{ github.workspace }}/KidVin-GitHub.go
+
+          ls -lh
