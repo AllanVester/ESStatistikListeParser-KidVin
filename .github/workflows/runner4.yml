@@ -133,18 +133,18 @@ jobs:
         run: |
           pip install pymongo discord-webhook
 
-      - name: Upload JSON file to GitHub Vin-branch
-        working-directory: "${{ github.workspace }}/temp/"
-        run: |
-          mv ${{ github.workspace }}/vin.json ${{ github.workspace }}/temp/vin.json
-          mv ${{ github.workspace }}/Branch-GitHub.py ${{ github.workspace }}/temp/Branch-GitHub.py
+      # - name: Upload JSON file to GitHub Vin-branch
+      #   working-directory: "${{ github.workspace }}/temp/"
+      #   run: |
+      #     mv ${{ github.workspace }}/vin.json ${{ github.workspace }}/temp/vin.json
+      #     mv ${{ github.workspace }}/Branch-GitHub.py ${{ github.workspace }}/temp/Branch-GitHub.py
           
-          python ${{ github.workspace }}/temp/Branch-GitHub.py vin
-        env:
-          FILENAME: "vin.json"
-          FILEPATH: "${{ github.workspace }}/temp/"
-          BRANCHNAME: "${{ inputs.filename-no-suffix }}.zip-vin"
-          GITHUB_UPLOAD_LIMIT: "${{ inputs.github-upload-limit }}"
+      #     python ${{ github.workspace }}/temp/Branch-GitHub.py vin
+      #   env:
+      #     FILENAME: "vin.json"
+      #     FILEPATH: "${{ github.workspace }}/temp/"
+      #     BRANCHNAME: "${{ inputs.filename-no-suffix }}.zip-vin"
+      #     GITHUB_UPLOAD_LIMIT: "${{ inputs.github-upload-limit }}"
 
       - name: Upload JSON file to Discord
         run: |
