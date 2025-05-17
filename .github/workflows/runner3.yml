@@ -51,7 +51,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install pymongo discord-webhook
+          pip install ijson pymongo discord-webhook
 
       - name: Run Python file
         run: |
