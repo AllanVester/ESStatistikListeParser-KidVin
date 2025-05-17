@@ -63,8 +63,8 @@ jobs:
 
       - name: Stitch files back together
         run: |
-          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.sql.gz"
-          file "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.sql.gz"
+          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename }}"
+          file "${{ github.workspace }}/${{ inputs.filename }}"
           
           rm -rf ${{ github.workspace }}/temp/
 
