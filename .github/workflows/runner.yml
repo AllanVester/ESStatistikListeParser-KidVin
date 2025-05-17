@@ -44,6 +44,7 @@ jobs:
           ref: "main"
           path: "${{ github.workspace }}/"
           sparse-checkout: |
+            /Branch-GitHub.py
             /go.mod
             /go.sum
             /KidVin-GitHub.go
