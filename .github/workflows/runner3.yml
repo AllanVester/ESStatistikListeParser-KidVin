@@ -39,7 +39,7 @@ jobs:
           ref: "main"
           path: "${{ github.workspace }}/"
           sparse-checkout: |
-            /KidVin-GitHub.go
+            /ESyn-GitHub.py
           sparse-checkout-cone-mode: false
           token: "${{ secrets.PAT }}"
 
