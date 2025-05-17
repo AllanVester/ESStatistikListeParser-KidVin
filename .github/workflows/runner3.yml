@@ -2,23 +2,6 @@ name: Runner (ESyn)
 
 on:
   workflow_dispatch:
-    inputs:
-      # filename:
-      #   description: 'ESStatistikListeModtag Filename'
-      #   required: true
-      #   type: string
-      filename-no-suffix:
-        description: 'ESStatistikListeModtag Filename (No Suffix)'
-        required: true
-        type: string
-      discord-upload-limit:
-        description: 'Discord Upload Limit (In MiB)'
-        required: true
-        type: string
-      github-upload-limit:
-        description: 'GitHub Upload Limit (In MiB)'
-        required: true
-        type: string
 
 jobs:
   esyn:
