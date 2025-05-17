@@ -39,8 +39,8 @@ jobs:
 
       - name: Stitch files back together
         run: |
-          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.json"
-          file "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.json"
+          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/kidvin.json"
+          file "${{ github.workspace }}/kidvin.json"
           
           rm -rf ${{ github.workspace }}/temp/
 
