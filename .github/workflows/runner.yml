@@ -48,6 +48,7 @@ jobs:
             /go.mod
             /go.sum
             /KidVin-GitHub.go
+            /UploadToDiscord-GitHub.py
           sparse-checkout-cone-mode: false
           token: "${{ secrets.PAT }}"
 
