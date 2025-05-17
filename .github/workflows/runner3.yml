@@ -1,0 +1,75 @@
+name: Runner
+
+on:
+  workflow_dispatch:
+    inputs:
+      # filename:
+      #   description: 'ESStatistikListeModtag Filename'
+      #   required: true
+      #   type: string
+      filename-no-suffix:
+        description: 'ESStatistikListeModtag Filename (No Suffix)'
+        required: true
+        type: string
+      discord-upload-limit:
+        description: 'Discord Upload Limit (In MiB)'
+        required: true
+        type: string
+      github-upload-limit:
+        description: 'GitHub Upload Limit (In MiB)'
+        required: true
+        type: string
+
+jobs:
+  esyn:
+    name: Run ESyn
+    runs-on: ubuntu-latest
+    steps:
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v5
+        with:
+          remove-haskell: "true"
+          remove-codeql: "true"
+          remove-swapfile: "true"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          repository: "AllanVester/ESStatistikListeParser-GitHub"
+          ref: "main"
+          path: "${{ github.workspace }}/"
+          sparse-checkout: |
+            /KidVin-GitHub.go
+          sparse-checkout-cone-mode: false
+          token: "${{ secrets.PAT }}"
+
+      - name: Checkout ESStatistikListeModtag repository (KidVin-branch)
+        uses: actions/checkout@v4
+        with:
+          repository: "AllanVester/ESStatistikListeModtag"
+          ref: "kidvin"
+          path: "${{ github.workspace }}/temp/"
+          sparse-checkout: |
+            /ESStatistikListeModtag
+          sparse-checkout-cone-mode: false
+          token: "${{ secrets.PAT }}"
+
+      - name: Stitch files back together
+        run: |
+          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.json"
+          file "${{ github.workspace }}/${{ inputs.filename-no-suffix }}.json"
+          
+          rm -rf ${{ github.workspace }}/temp/
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: |
+          pip install pymongo discord-webhook
+
+      - name: Run Python file
+        run: |
+          python ${{ github.workspace }}/ESyn-GitHub.py
