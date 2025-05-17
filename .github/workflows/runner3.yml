@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: "AllanVester/ESStatistikListeModtag"
-          ref: "kidvin"
+          ref: "vin"
           path: "${{ github.workspace }}/temp/"
           sparse-checkout: |
             /ESStatistikListeModtag
@@ -39,8 +39,8 @@ jobs:
 
       - name: Stitch files back together
         run: |
-          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/kidvin.json"
-          file "${{ github.workspace }}/kidvin.json"
+          cat ${{ github.workspace }}/temp/ESStatistikListeModtag/*.part* > "${{ github.workspace }}/vin.json"
+          file "${{ github.workspace }}/vin.json"
           
           rm -rf ${{ github.workspace }}/temp/
 
