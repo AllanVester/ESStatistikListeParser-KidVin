@@ -138,18 +138,18 @@ jobs:
         run: |
           pip install pymongo discord-webhook
 
-      - name: Upload JSON file to GitHub KidVin-branch
-        working-directory: "${{ github.workspace }}/temp/"
-        run: |
-          mv ${{ github.workspace }}/kidvin.json ${{ github.workspace }}/temp/kidvin.json
-          mv ${{ github.workspace }}/Branch-GitHub.py ${{ github.workspace }}/temp/Branch-GitHub.py
+      # - name: Upload JSON file to GitHub KidVin-branch
+      #   working-directory: "${{ github.workspace }}/temp/"
+      #   run: |
+      #     mv ${{ github.workspace }}/kidvin.json ${{ github.workspace }}/temp/kidvin.json
+      #     mv ${{ github.workspace }}/Branch-GitHub.py ${{ github.workspace }}/temp/Branch-GitHub.py
           
-          python ${{ github.workspace }}/temp/Branch-GitHub.py kidvin
-        env:
-          FILENAME: "kidvin.json"
-          FILEPATH: "${{ github.workspace }}/temp/"
-          BRANCHNAME: "${{ inputs.filename }}-kidvin"
-          GITHUB_UPLOAD_LIMIT: "${{ inputs.github-upload-limit }}"
+      #     python ${{ github.workspace }}/temp/Branch-GitHub.py kidvin
+      #   env:
+      #     FILENAME: "kidvin.json"
+      #     FILEPATH: "${{ github.workspace }}/temp/"
+      #     BRANCHNAME: "${{ inputs.filename }}-kidvin"
+      #     GITHUB_UPLOAD_LIMIT: "${{ inputs.github-upload-limit }}"
 
       - name: Upload JSON file to Discord
         run: |
